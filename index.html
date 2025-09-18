@@ -1,11 +1,323 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Henry · AI/ML 포트폴리오</title>
+  <meta name="description" content="AI/ML 엔지니어 지망생 형님의 프로젝트 포트폴리오와 기술 스택, 이력 정리." />
+  <meta name="author" content="Henry" />
+  <meta property="og:title" content="Henry · AI/ML 포트폴리오" />
+  <meta property="og:description" content="AI/ML 프로젝트, Flask+MongoDB, AWS EC2 배포, 알고리즘 학습 기록" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="" />
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    :root {
+      --bg: #0b0c10;
+      --panel: #111317;
+      --text: #e5e7eb;
+      --muted: #9aa3af;
+      --brand: #7c3aed; /* violet-600 */
+      --brand-2: #22d3ee; /* cyan-400 */
+      --ok: #22c55e;
+      --warn: #f59e0b;
+      --err: #ef4444;
+      --ring: #312e81; /* indigo-900 */
+    }
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f8fafc;
+        --panel: #ffffff;
+        --text: #0f172a;
+        --muted: #475569;
+        --ring: #c7d2fe;
+      }
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: linear-gradient(180deg, var(--bg), #0b0c10 30%, #0b0c10 70%, var(--bg));
+      color: var(--text);
+      line-height: 1.65;
+      letter-spacing: 0.1px;
+    }
+    a { color: var(--brand-2); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { width: min(1100px, 92%); margin: 0 auto; }
+    header.nav {
+      position: sticky; top: 0; backdrop-filter: blur(10px);
+      background: color-mix(in oklab, var(--bg) 85%, transparent);
+      border-bottom: 1px solid color-mix(in oklab, var(--ring) 35%, transparent);
+      z-index: 50;
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
+    .brand { font-weight: 800; letter-spacing: 0.3px; }
+    .brand small { font-weight: 600; color: var(--muted); }
+    .menu { display: flex; gap: 18px; }
+    .menu a { font-weight: 600; color: var(--text); opacity: 0.9; }
+    .menu a:hover { opacity: 1; }
+
+    .hero { padding: 56px 0 28px; }
+    .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 28px; align-items: center; }
+    @media (max-width: 880px){ .hero-grid { grid-template-columns: 1fr; } }
+    .hero h1 { font-size: clamp(28px, 4vw, 44px); line-height: 1.15; margin: 0 0 8px; }
+    .hero p.lead { font-size: clamp(15px, 2vw, 18px); color: var(--muted); margin: 0 0 16px; }
+    .chipbar { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+    .chip { padding: 6px 10px; border-radius: 999px; background: color-mix(in oklab, var(--panel) 70%, transparent); border: 1px solid color-mix(in oklab, var(--ring) 35%, transparent); font-size: 13px; }
+
+    .panel { background: var(--panel); border: 1px solid color-mix(in oklab, var(--ring) 40%, transparent); border-radius: 16px; padding: 18px; }
+    .section { padding: 20px 0 8px; }
+    .section h2 { font-size: clamp(20px, 3vw, 26px); margin: 0 0 10px; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 1000px){ .grid { grid-template-columns: repeat(2, 1fr);} }
+    @media (max-width: 680px){ .grid { grid-template-columns: 1fr;} }
+
+    .card { position: relative; display: flex; flex-direction: column; gap: 10px; padding: 16px; border-radius: 14px; background: linear-gradient(180deg, color-mix(in oklab, var(--panel) 92%, transparent), color-mix(in oklab, #000 14%, transparent)); border: 1px solid color-mix(in oklab, var(--ring) 45%, transparent); }
+    .card h3 { margin: 0; font-size: 18px; }
+    .meta { display: flex; gap: 8px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .tag { font-size: 12px; padding: 4px 8px; border-radius: 999px; border: 1px solid color-mix(in oklab, var(--ring) 45%, transparent); background: color-mix(in oklab, var(--panel) 85%, transparent); }
+    .card a.btn { align-self: flex-start; display: inline-block; padding: 8px 12px; border-radius: 10px; border: 1px solid color-mix(in oklab, var(--ring) 45%, transparent); background: color-mix(in oklab, var(--panel) 80%, transparent); font-weight: 700; }
+    .card a.btn:hover { background: color-mix(in oklab, var(--panel) 65%, transparent); }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 800px){ .two-col { grid-template-columns: 1fr; } }
+
+    .timeline { display: grid; gap: 10px; }
+    .titem { display: grid; grid-template-columns: 120px 1fr; gap: 12px; }
+    @media (max-width: 560px){ .titem { grid-template-columns: 1fr; } }
+    .titem time { color: var(--muted); font-size: 13px; }
+
+    footer { margin: 40px 0 60px; text-align: center; color: var(--muted); }
+    .small { font-size: 13px; color: var(--muted); }
+
+    /* Focus rings */
+    a, button { outline-color: var(--brand-2); }
+
+    /* Print */
+    @media print {
+      header.nav { display: none; }
+      .card a.btn { display: none; }
+      body { background: #fff; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Henry",
+    "jobTitle": "AI/ML Engineer (Aspirant)",
+    "alumniOf": {"@type":"CollegeOrUniversity","name":"George Brown College"},
+    "url": "",
+    "sameAs": ["", ""]
+  }
+  </script>
 </head>
 <body>
-    <h1>Ohayo!</h1>
+  <header class="nav">
+    <div class="container nav-inner">
+      <div class="brand">Henry <small>AI/ML & Full‑Stack 지망</small></div>
+      <nav class="menu" aria-label="Primary">
+        <a href="#about">소개</a>
+        <a href="#projects">프로젝트</a>
+        <a href="#skills">기술</a>
+        <a href="#timeline">학습/경력</a>
+        <a href="#contact">연락</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero" id="about">
+      <div class="hero-grid">
+        <div>
+          <h1>AI/ML로 커리어 전환 중인 개발자, <span style="color:var(--brand)">Henry</span></h1>
+          <p class="lead">Python·PyTorch 중심의 머신러닝과 Flask·MongoDB·AWS EC2 기반의 배포 경험을 쌓아, <strong>서비스 전 주기</strong>를 이해하는 엔지니어로 성장하고 있습니다. 알고리즘·수학을 꾸준히 다지고, 작은 제품이라도 끝까지 <strong>만들고 배포</strong>하는 것을 목표로 합니다. (장난은 살짝만: 모델이 과적합되면 저도 과몰입합니다 😄)</p>
+          <div class="chipbar" role="list" aria-label="핵심 키워드">
+            <div class="chip" role="listitem">Python</div>
+            <div class="chip" role="listitem">PyTorch</div>
+            <div class="chip" role="listitem">Flask · MongoDB</div>
+            <div class="chip" role="listitem">AWS EC2</div>
+            <div class="chip" role="listitem">Algorithms (BFS/DFS/DP)</div>
+            <div class="chip" role="listitem">GitHub · CI 기초</div>
+          </div>
+        </div>
+        <div class="panel">
+          <h2 style="margin:0 0 8px">요약</h2>
+          <ul style="margin:0; padding-left:18px">
+            <li>목표: <strong>AI/ML 엔지니어</strong> → 데이터·모델·배포를 잇는 실전가</li>
+            <li>관심: RAG, 모델 미세조정, 간단한 MLOps/배포 자동화</li>
+            <li>학력: George Brown College · Architectural Technician</li>
+            <li>현재: 알고리즘 문제(백준/프로그래머스) & PyTorch 스터디 진행</li>
+          </ul>
+          <p class="small" style="margin-top:8px">※ 세부 연락처/링크는 아래에 있습니다. 이력서는 요청 시 제공.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <h2>대표 프로젝트</h2>
+      <div class="grid" role="list">
+        <article class="card" role="listitem">
+          <h3>메모 웹앱 — Flask + MongoDB + AWS EC2 배포</h3>
+          <div class="meta">개인 프로젝트 · 2025</div>
+          <p>사용자 메모를 생성/조회/좋아요 정렬로 보여주는 웹앱. <strong>MongoDB</strong>에 저장하고, <strong>EC2</strong>에 직접 배포하여 서버 운영 경험을 축적. 정렬 규칙(좋아요 내림차순), 버튼 동작 등 <em>명세 기반</em> 구현을 통해 요구사항 해석과 데이터 모델링을 연습했습니다.</p>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">Flask</span><span class="tag">MongoDB</span><span class="tag">Bootstrap</span><span class="tag">AWS EC2</span>
+          </div>
+          <a class="btn" href="#" target="_blank" rel="noopener">GitHub 저장소</a>
+        </article>
+
+        <article class="card" role="listitem">
+          <h3>Mapify‑like 마인드맵 생성기 (클론)</h3>
+          <div class="meta">토이/학습 · 2025</div>
+          <p>프롬프트를 입력하면 트리 구조 데이터를 생성하고, 캔버스에 노드/엣지를 시각화. OpenAI API 연동 설계와 데이터 구조화(트리/그래프) 로직을 고민했습니다. <em>프론트엔드 렌더링</em>과 상태관리, <em>백엔드 API</em> 연계 기초를 함께 실습.</p>
+          <div class="tags">
+            <span class="tag">JavaScript</span><span class="tag">Canvas/SVG</span><span class="tag">OpenAI API(설계)</span>
+          </div>
+          <a class="btn" href="#" target="_blank" rel="noopener">Demo/Repo</a>
+        </article>
+
+        <article class="card" role="listitem">
+          <h3>Puppeteer 자동화 — 동영상 m3u8 링크 추출</h3>
+          <div class="meta">연구/프로토타입 · 2025</div>
+          <p><strong>Puppeteer</strong>로 사이트 로그인→재생→네트워크 캡처를 자동화하고, <code>iframe</code> 내부에서 <code>m3u8</code> 링크를 추출하는 워크플로를 <em>설계/시도</em>. 셀렉터 안정화, 대기 전략, 에러 리트라이 등 <strong>헤드리스 자동화</strong>의 실전 이슈를 다뤘습니다.</p>
+          <div class="tags">
+            <span class="tag">Node.js</span><span class="tag">Puppeteer</span><span class="tag">Automation</span>
+          </div>
+          <a class="btn" href="#" target="_blank" rel="noopener">코드 스니펫</a>
+        </article>
+
+        <article class="card" role="listitem">
+          <h3>Chrome 확장 — 캡처→자르기→저장</h3>
+          <div class="meta">아이디어/진행중</div>
+          <p>브라우저 화면을 캡처하고, 간단한 크롭 UI 제공 후 <code>.png</code>로 지정 폴더 저장. Manifest V3, <code>chrome.scripting</code>, <code>chrome.tabs</code> API 플로우를 설계했고, 사용자 권한/스토리지 정책을 정리 중입니다.</p>
+          <div class="tags">
+            <span class="tag">Chrome Extension</span><span class="tag">MV3</span><span class="tag">TypeScript(예정)</span>
+          </div>
+          <a class="btn" href="#" target="_blank" rel="noopener">Repo</a>
+        </article>
+
+        <article class="card" role="listitem">
+          <h3>Tetris Bot vs User — 알고리즘/AI 설계</h3>
+          <div class="meta">구상/설계</div>
+          <p>휴리스틱(라인 제거, 구멍 최소화 등) 기반 봇과 유저 대결 앱(안드로이드)을 기획. 상태 평가함수, 탐색 깊이, 연산시간 제약을 고려한 
+            <strong>의사결정 로직</strong>을 설계했습니다. PyTorch로 강화학습 실험 플랜도 문서화.</p>
+          <div class="tags">
+            <span class="tag">Heuristics</span><span class="tag">Search</span><span class="tag">Android(기획)</span>
+          </div>
+          <a class="btn" href="#" target="_blank" rel="noopener">설계 문서</a>
+        </article>
+
+        <article class="card" role="listitem">
+          <h3>알고리즘 문제풀이 & 학습 노트</h3>
+          <div class="meta">지속 진행</div>
+          <p>백준·프로그래머스에서 <strong>BFS/DFS/DP/그리디/이분탐색</strong> 문제를 꾸준히 풀이. 해시·집합·정렬 패턴을 정리하고, 실수/오답 노트로 재발 방지. 목표: Programmers Lv2 & 백준 실버2 이상.</p>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">자료구조</span><span class="tag">문제해결</span>
+          </div>
+          <a class="btn" href="#" target="_blank" rel="noopener">풀이 저장소</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="skills">
+      <h2>기술 스택</h2>
+      <div class="two-col">
+        <div class="card">
+          <h3>Language & Core</h3>
+          <ul>
+            <li>Python (데이터 처리, 알고리즘), JavaScript/TypeScript(기본)</li>
+            <li>Linux 셸·Git·GitHub (브랜치/PR 기초), VS Code</li>
+            <li>기초 수학: 선형대수·확률(엔트로피/크로스엔트로피), 경사하강법</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>AI/ML</h3>
+          <ul>
+            <li>PyTorch 기초 (텐서, 오토그래드, CNN/RNN 개념, Transformers 요약 이해)</li>
+            <li>데이터 전처리, 손실함수·옵티마이저(모멘텀/Adam 개념)</li>
+            <li>RAG·미세조정·임베딩(관심/학습 중)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Web & Backend</h3>
+          <ul>
+            <li>Flask API, Jinja 템플릿, REST 구조 설계</li>
+            <li>MongoDB(컬렉션 설계, 쿼리/인덱스 기초)</li>
+            <li>AWS EC2 배포(리눅스, 가상환경, Nginx/Gunicorn 기초)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Automation & Tools</h3>
+          <ul>
+            <li>Puppeteer 헤드리스 브라우저 자동화</li>
+            <li>Chrome Extension(MV3) 설계</li>
+            <li>Docker/DevOps 개론(학습 중)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="timeline">
+      <h2>학습/경력 타임라인</h2>
+      <div class="panel timeline">
+        <div class="titem">
+          <time>2025</time>
+          <div>
+            <strong>AI/ML 집중 학습</strong> — PyTorch 블리츠, 경사하강법 실습, 알고리즘 풀이 루틴 정착. Flask+MongoDB 프로젝트를 EC2에 배포.
+          </div>
+        </div>
+        <div class="titem">
+          <time>2024–2025</time>
+          <div>
+            <strong>사이드 프로젝트 다각화</strong> — 마인드맵 생성기(클론), Puppeteer 자동화, 크롬 확장 설계, 테트리스 봇 기획 등.
+          </div>
+        </div>
+        <div class="titem">
+          <time>이전</time>
+          <div>
+            <strong>Architectural Technician</strong> — George Brown College 수료. 문제를 구조적으로 쪼개고 도면/명세를 해석하는 역량을 개발 → 소프트웨어 요구사항 해석으로 전이.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contact">
+      <h2>연락 & 링크</h2>
+      <div class="panel two-col">
+        <div>
+          <p><strong>GitHub</strong>: <a href="#" target="_blank" rel="noopener">github.com/your-id</a><br>
+             <strong>LinkedIn</strong>: <a href="#" target="_blank" rel="noopener">linkedin.com/in/your-id</a><br>
+             <strong>Email</strong>: <a href="mailto:you@example.com">you@example.com</a></p>
+          <p class="small">※ 개인 정보는 필요 시 제공. 스팸은 모델이 알아서 분류(희망)합니다 🙃</p>
+        </div>
+        <div>
+          <p><strong>관심 포지션</strong>: AI/ML 엔지니어, ML이 접목된 백엔드, MLOps 주니어</p>
+          <p><strong>한 줄 각오</strong>: 작은 기능이라도 <em>완성→배포→피드백</em>의 사이클을 돌리는 엔지니어가 되겠습니다.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>© <span id="y"></span> Henry · Built with plain HTML/CSS. 배포는 GitHub Pages 추천.</p>
+    </footer>
+  </main>
+
+  <!-- 작은 스크립트: 연도 표기만 자동화 -->
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+
+  <!--
+  ===== 편집 가이드 =====
+  1) 위 "연락 & 링크" 섹션의 GitHub/LinkedIn/Email 링크를 실제 정보로 바꾸세요.
+  2) 각 프로젝트 카드의 버튼 링크(#)를 실제 Repo/Demo로 교체하세요.
+  3) 필요 시 섹션을 추가(수상/블로그/자격증 등)하거나 텍스트를 더 간결하게 조정하세요.
+  4) 이미지/썸네일을 쓰고 싶다면 <img>를 카드 상단에 추가하세요(폭 100%, border-radius: 10px 권장).
+  5) 영어 버전이 필요하면 <html lang="en"> 으로 복사해 별도 파일을 만드세요.
+  -->
 </body>
 </html>
